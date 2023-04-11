@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pl">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/music.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Audycje PSM - klasa 4</title>
+		<script src="/src/pages/klasa-4/main.ts" type="module"></script>
+	</head>
+	<body class="h-screen flex flex-col justify-between items-center gap-6 p-4 pt-0">
+		<div class="navbar justify-center">
+			<div class="gap-2 md:gap-3">
+				<a class="btn btn-square btn-outline" href="/">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke-width="1.5"
+						stroke="currentColor"
+						class="w-6 h-6"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M19.5 12h-15m0 0l6.75 6.75M4.5 12l6.75-6.75"
+						/>
+					</svg>
+				</a>
+				<a class="btn btn-primary sm:w-44 md:w-52 lg:btn-wide" disabled href="/klasa-4">klasa 4</a>
+				<a class="btn btn-secondary sm:w-44 md:w-52 lg:btn-wide" href="/klasa-5">klasa 5</a>
+				<a class="btn btn-accent sm:w-44 md:w-52 lg:btn-wide" href="/klasa-6">klasa 6</a>
+			</div>
+		</div>
+
+		<div class="card compact bg-base-200 border">
+			<div class="card-body items-center">
+				<div class="card-title text-center">Statystyki</div>
+				<div class="flex gap-2">
+					<div class="badge badge-lg badge-success">
+						<span>Poprawne: <span id="score-correct" class="font-semibold">0</span></span>
+					</div>
+					<div class="badge badge-lg badge-error">
+						<span>Błędne: <span id="score-incorrect" class="font-semibold">0</span></span>
+					</div>
+					<div class="badge badge-lg badge-warning">
+						<span>Pominięte: <span id="score-skipped" class="font-semibold">0</span></span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<form id="form" class="card bg-base-200 border w-[24rem]">
+			<div class="card-body">
+				<span id="title" class="font-semibold"></span>
+				<div class="flex items-center gap-2">
+					<button
+						id="play-pause"
+						class="btn btn-sm btn-circle btn-ghost loading"
+						type="button"
+					></button>
+					<input id="progress" type="range" min="0" max="0" step="1" class="range range-sm" />
+					<span id="progress-time"></span>
+				</div>
+				<div class="divider"></div>
+				<div class="form-control">
+					<label for="answer" class="label">
+						<span class="label-text">Odpowiedź</span>
+					</label>
+					<input
+						id="answer"
+						type="text"
+						class="input input-bordered w-full"
+						placeholder="Wpisz odpowiedź"
+						autocomplete="off"
+						autocorrect="off"
+						autocapitalize="off"
+						spellcheck="false"
+						required
+					/>
+					<label class="label">
+						<span id="correct" class="label-text text-success hidden">Poprawna odpowiedź</span>
+						<span id="incorrect" class="label-text text-error hidden">Niepoprawna odpowiedź</span>
+					</label>
+				</div>
+				<div class="card-actions justify-end">
+					<button id="skip" class="btn btn-ghost" type="button">Pomiń</button>
+					<button id="check" class="btn btn-primary">Sprawdź</button>
+					<button id="next" class="btn btn-primary hidden" type="button">Następny utwór</button>
+				</div>
+			</div>
+		</form>
+
+		<div></div>
+		<div></div>
+		<div></div>
+	</body>
+</html>
