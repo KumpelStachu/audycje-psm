@@ -2,7 +2,6 @@ import './style.css'
 import { closest, distance } from 'fastest-levenshtein'
 import pauseSvg from './pause.svg?raw'
 import playSvg from './play.svg?raw'
-
 export type SongData = {
 	filename: string
 	title: string
@@ -11,13 +10,27 @@ export type SongData = {
 	siminarity?: number
 }
 
-const songs: SongData[] = []
+let songs: Generator<SongData, void>
 let currentSong: SongData
 
-const score = {
-	correct: 0,
-	incorrect: 0,
-	skipped: 0,
+const score = loadScore()
+
+function loadScore() {
+	try {
+		const parsed = JSON.parse(localStorage[`score${location.pathname}`])
+		if ('correct' in parsed && 'incorrect' in parsed && 'skipped' in parsed) return parsed
+		throw new Error('Invalid score')
+	} catch (_) {
+		return {
+			correct: 0,
+			incorrect: 0,
+			skipped: 0,
+		}
+	}
+}
+
+function saveScore() {
+	localStorage[`score${location.pathname}`] = JSON.stringify(score)
 }
 
 const audio = document.createElement('audio')
@@ -73,6 +86,7 @@ playPauseBtn.addEventListener('click', () => {
 
 skipBtn.addEventListener('click', () => {
 	score.skipped++
+	saveScore()
 	nextSong()
 })
 
@@ -105,15 +119,17 @@ form.addEventListener('submit', e => {
 	checkBtn.classList.add('hidden')
 	nextBtn.classList.remove('hidden')
 	nextBtn.focus()
+
+	saveScore()
 })
 
 export default function prepareApp(songsData: SongData[]) {
-	songs.push(...songsData)
+	songs = songGenerator(songsData)
 	nextSong()
 }
 
 function nextSong() {
-	currentSong = songs[Math.floor(Math.random() * songs.length)]
+	currentSong = songs.next().value!
 	audio.src = currentSong.filename
 	audio.currentTime = currentSong.offset ?? 0
 
@@ -142,4 +158,15 @@ function nextSong() {
 	// titleText.innerText = currentSong.title //! DEBUG
 
 	audio.play().catch(() => (location.pathname = '/'))
+}
+
+function* songGenerator(songs: SongData[]) {
+	let shuffled = [...songs].sort(() => Math.random() - 0.5)
+	while (true) {
+		if (shuffled.length === 0) {
+			shuffled = [...songs].sort(() => Math.random() - 0.5)
+		}
+
+		yield shuffled.pop()!
+	}
 }

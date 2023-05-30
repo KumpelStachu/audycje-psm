@@ -1,29 +1,15 @@
-import { readdirSync, renameSync, rmSync } from 'fs'
 import { defineConfig } from 'vite'
 import { resolve } from 'path'
 
-const pages = readdirSync(resolve(__dirname, 'src/pages'))
-
 export default defineConfig({
-	plugins: [
-		{
-			name: 'mpa-copy',
-			closeBundle() {
-				pages.forEach(path => {
-					renameSync(
-						resolve(__dirname, 'dist/src/pages', path, 'index.html'),
-						resolve(__dirname, 'dist', path === 'index' ? '' : path, 'index.html')
-					)
-				})
-				rmSync(resolve(__dirname, 'dist/src'), { recursive: true })
-			},
-		},
-	],
 	build: {
 		rollupOptions: {
-			input: Object.fromEntries(
-				pages.map(path => [path, resolve(__dirname, 'src/pages', path, 'index.html')])
-			),
+			input: {
+				main: resolve(__dirname, 'index.html'),
+				klasa4: resolve(__dirname, 'klasa-4/index.html'),
+				klasa5: resolve(__dirname, 'klasa-5/index.html'),
+				klasa6: resolve(__dirname, 'klasa-6/index.html'),
+			},
 		},
 	},
 })

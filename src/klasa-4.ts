@@ -1,4 +1,4 @@
-import prepareApp from '../../app'
+import prepareApp from './app'
 
 prepareApp([
 	{
